@@ -17,9 +17,9 @@ namespace OrderManagement.Controllers
     //[EnableCors("CorsPolicy")]
     public class CustomerController : ControllerBase
     {
-        private readonly ApplicationDBContext _dBContext;
+        private readonly DataAccess.ApplicationDBContext _dBContext;
 
-        public CustomerController(ApplicationDBContext dBContext)
+        public CustomerController(DataAccess.ApplicationDBContext dBContext)
         {
             _dBContext = dBContext;
         }

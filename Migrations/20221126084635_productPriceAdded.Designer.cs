@@ -9,7 +9,7 @@ using OrderManagement.DataAccess;
 
 namespace OrderManagement.Migrations
 {
-    [DbContext(typeof(ApplicationDBContext))]
+    [DbContext(typeof(DataAccess.ApplicationDBContext))]
     [Migration("20221126084635_productPriceAdded")]
     partial class productPriceAdded
     {

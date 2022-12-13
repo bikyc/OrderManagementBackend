@@ -9,7 +9,7 @@ using OrderManagement.DataAccess;
 
 namespace OrderManagement.Migrations
 {
-    [DbContext(typeof(ApplicationDBContext))]
+    [DbContext(typeof(DataAccess.ApplicationDBContext))]
     [Migration("20221126083837_orderForeignkey")]
     partial class orderForeignkey
     {

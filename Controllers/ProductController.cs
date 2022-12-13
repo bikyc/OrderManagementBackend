@@ -14,9 +14,9 @@ namespace OrderManagement.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly ApplicationDBContext _dBContext;
+        private readonly DataAccess.ApplicationDBContext _dBContext;
 
-        public ProductController(ApplicationDBContext DbContext)
+        public ProductController(DataAccess.ApplicationDBContext DbContext)
         {
             _dBContext = DbContext;
         }

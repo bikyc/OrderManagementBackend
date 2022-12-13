@@ -1,7 +1,9 @@
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -9,12 +11,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using OrderManagement.Authentication;
 using OrderManagement.DataAccess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IdentityRole = Microsoft.AspNet.Identity.EntityFramework.IdentityRole;
 
 namespace OrderManagement
 {
@@ -31,20 +35,21 @@ namespace OrderManagement
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
+            // Adding Jwt Bearer  
+            .AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = Configuration["Jwt.issue"],
-                        ValidAudience = Configuration["jwt.Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:key"]))
-                    };
-                });
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidAudience = Configuration["JWT:ValidAudience"],
+                    ValidIssuer = Configuration["JWT:ValidIssuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
+                };
+            });
+           
             services.AddMvc();
             services.AddControllers();
            
@@ -52,6 +57,13 @@ namespace OrderManagement
             var connectionString = Configuration.GetConnectionString("connStr");
             //services.AddDbContext<ApplicationDBContext>(x => x.UseSqlServer(connectionString));
             /*End of Adding Connection string section*/
+
+            // For Identity  
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddUserStore<ApplicationDBContext>()
+                .AddDefaultTokenProviders();
+
+ 
 
             // implement cors policy 
             services.AddCors(o => o.AddPolicy("CorsPolicy", config =>
@@ -91,4 +103,6 @@ namespace OrderManagement
             });
         }
     }
+
+
 }

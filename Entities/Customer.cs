@@ -14,10 +14,6 @@ namespace OrderManagement.Entities
 
         public string name { get; set; }
 
-        public string Username { get; set; }
-
-        public string Password { get; set; }
-
         public string email { get; set; }
 
         public string Role { get; set; }
