@@ -76,7 +76,6 @@ namespace OrderManagement
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseSwaggerUI();
 
             app.UseHttpsRedirection();
 
