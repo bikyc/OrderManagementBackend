@@ -55,6 +55,7 @@ namespace OrderManagement
            
             /*Start Adding Connection String here*/
             var connectionString = Configuration.GetConnectionString("connStr");
+            services.AddDbContext<ApplicationDBContext>(x => x.UseSqlServer(connectionString));
             //services.AddDbContext<ApplicationDBContext>(x => x.UseSqlServer(connectionString));
             /*End of Adding Connection string section*/
 
