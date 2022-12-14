@@ -1,8 +1,4 @@
-﻿
-
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.EntityFrameworkCore;
-using OrderManagement.Authentication;
+﻿using Microsoft.EntityFrameworkCore;
 using OrderManagement.Entities;
 using System;
 using System.Collections.Generic;
@@ -30,9 +26,11 @@ namespace OrderManagement.DataAccess
             builder.Entity<Product>()
                         .ToTable("tbl_Product");
 
-            base.OnModelCreating(builder);
-            builder.Entity<Users>()
-                        .ToTable("tbl_users");
+
+            //builder.Entity<Users>()
+            //.HasMany(u => u.Roles)
+            //.WithMany(u => u.Users)
+            //.UsingEntity(u => u.ToTable("tbl_UserRoles"));
         }
 
         public DbSet<Customer> customers { get; set; }
@@ -40,6 +38,5 @@ namespace OrderManagement.DataAccess
 
         public DbSet<Product> products { get; set; }
 
-        public DbSet<Users> users { get; set; }
     }
 }

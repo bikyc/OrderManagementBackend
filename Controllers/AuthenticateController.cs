@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using OrderManagement.Authentication;
+using OrderManagement.DataAccess;
 using OrderManagement.User;
 using System;
 using System.Collections.Generic;
@@ -12,6 +14,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace OrderManagement.Controllers
 {
@@ -21,14 +24,15 @@ namespace OrderManagement.Controllers
     {
         private readonly AspNetUserManager<ApplicationUser> userManager;
         private readonly AspNetRoleManager<IdentityRole> roleManager;
-        private readonly DbContext _DbContext;
+        private readonly ApplicationDBContext _DbContext;
+        private readonly IConfiguration _configuration;
 
         public AuthenticateController(AspNetUserManager<ApplicationUser> userManager, AspNetRoleManager<IdentityRole> roleManager,
-                                      DbContext DbContext)
+                                      IConfiguration config)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
-            _DbContext = DbContext;
+            _configuration = config;
         }
 
         [HttpPost]
@@ -52,10 +56,10 @@ namespace OrderManagement.Controllers
                     authClaims.Add(new Claim(ClaimTypes.Role, userRole));
                 }
 
-                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(DbContext("JWT:Secret")));
+                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Token:JwtKey"]));
 
-                var token = new JwtSecurityToken(issuer: DbContext("JWT:ValidIssuer"),
-                                                 audience: DbContext("JWT:ValidAudience"),
+                var token = new JwtSecurityToken(issuer: _configuration["JWT:ValidIssuer"],
+                                                 audience: _configuration["JWT:ValidAudience"],
                                                  expires: DateTime.Now.AddHours(3),
                                                  claims: authClaims,
                                                  signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256));
@@ -69,10 +73,6 @@ namespace OrderManagement.Controllers
             return Unauthorized();
         }
 
-        private string DbContext(string v)
-        {
-            throw new NotImplementedException();
-        }
 
         [HttpPost]
         [Route("register")]
