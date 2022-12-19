@@ -9,16 +9,16 @@ using OrderManagement.DataAccess;
 
 namespace OrderManagement.Migrations
 {
-    [DbContext(typeof(DataAccess.ApplicationDBContext))]
-    [Migration("20221126100136_productActive")]
-    partial class productActive
+    [DbContext(typeof(ApplicationDBContext))]
+    [Migration("20221215090745_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("OrderManagement.Entities.Customer", b =>
@@ -27,6 +27,9 @@ namespace OrderManagement.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("address")
                         .HasColumnType("nvarchar(max)");
@@ -55,13 +58,19 @@ namespace OrderManagement.Migrations
                     b.Property<int?>("customercust_id")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("dateTime")
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("orderDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("orderName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("productProd_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("totalPrice")
                         .HasColumnType("int");
 
                     b.HasKey("order_id");
@@ -106,6 +115,10 @@ namespace OrderManagement.Migrations
                     b.HasOne("OrderManagement.Entities.Product", "product")
                         .WithMany()
                         .HasForeignKey("productProd_id");
+
+                    b.Navigation("customer");
+
+                    b.Navigation("product");
                 });
 #pragma warning restore 612, 618
         }

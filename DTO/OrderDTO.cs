@@ -12,7 +12,7 @@ namespace OrderManagement.DTO
 
         public int productId { get; set; }
 
-        public decimal quantity { get; set; }
+        public int quantity { get; set; }
 
         public int totalprice { get; set; }
 

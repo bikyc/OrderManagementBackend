@@ -9,16 +9,16 @@ using OrderManagement.DataAccess;
 
 namespace OrderManagement.Migrations
 {
-    [DbContext(typeof(DataAccess.ApplicationDBContext))]
-    [Migration("20221126083837_orderForeignkey")]
-    partial class orderForeignkey
+    [DbContext(typeof(ApplicationDBContext))]
+    [Migration("20221215090904_init2")]
+    partial class init2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("OrderManagement.Entities.Customer", b =>
@@ -27,6 +27,9 @@ namespace OrderManagement.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("address")
                         .HasColumnType("nvarchar(max)");
@@ -55,13 +58,19 @@ namespace OrderManagement.Migrations
                     b.Property<int?>("customercust_id")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("dateTime")
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("orderDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("orderName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("productProd_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("totalPrice")
                         .HasColumnType("int");
 
                     b.HasKey("order_id");
@@ -86,9 +95,70 @@ namespace OrderManagement.Migrations
                     b.Property<string>("PName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("PPrice")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
                     b.HasKey("Prod_id");
 
                     b.ToTable("tbl_Product");
+                });
+
+            modelBuilder.Entity("OrderManagement.Entities.Roles", b =>
+                {
+                    b.Property<int>("roleid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("RoleType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("roleid");
+
+                    b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("OrderManagement.Entities.Users", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("username")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("username")
+                        .IsUnique()
+                        .HasFilter("[username] IS NOT NULL");
+
+                    b.ToTable("tbl_User");
+                });
+
+            modelBuilder.Entity("RolesUsers", b =>
+                {
+                    b.Property<int>("Rolesroleid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Usersid")
+                        .HasColumnType("int");
+
+                    b.HasKey("Rolesroleid", "Usersid");
+
+                    b.HasIndex("Usersid");
+
+                    b.ToTable("RolesUsers");
                 });
 
             modelBuilder.Entity("OrderManagement.Entities.Order", b =>
@@ -100,6 +170,25 @@ namespace OrderManagement.Migrations
                     b.HasOne("OrderManagement.Entities.Product", "product")
                         .WithMany()
                         .HasForeignKey("productProd_id");
+
+                    b.Navigation("customer");
+
+                    b.Navigation("product");
+                });
+
+            modelBuilder.Entity("RolesUsers", b =>
+                {
+                    b.HasOne("OrderManagement.Entities.Roles", null)
+                        .WithMany()
+                        .HasForeignKey("Rolesroleid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OrderManagement.Entities.Users", null)
+                        .WithMany()
+                        .HasForeignKey("Usersid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

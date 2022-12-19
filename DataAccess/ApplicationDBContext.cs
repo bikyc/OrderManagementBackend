@@ -26,17 +26,25 @@ namespace OrderManagement.DataAccess
             builder.Entity<Product>()
                         .ToTable("tbl_Product");
 
+            base.OnModelCreating(builder);
+            builder.Entity<Users>()
+                        .ToTable("tbl_User");
+
+            //base.OnModelCreating(builder);
+            //builder.Entity<Roles>()
+            //            .ToTable("tbl_Role");
 
             //builder.Entity<Users>()
             //.HasMany(u => u.Roles)
             //.WithMany(u => u.Users)
-            //.UsingEntity(u => u.ToTable("tbl_UserRoles"));
+            //.UsingEntity(u => u.ToTable("tbl_Users"));
         }
 
         public DbSet<Customer> customers { get; set; }
         public DbSet<Order> orders { get; set; }
 
         public DbSet<Product> products { get; set; }
+
 
     }
 }

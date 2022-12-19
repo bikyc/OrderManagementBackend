@@ -19,9 +19,9 @@ namespace OrderManagement.Entities
 
         public Product product { get; set; }
 
-        public decimal quantity { get; set; }
+        public int quantity { get; set; }
 
-        public decimal totalPrice { get; set; }
+        public int totalPrice { get; set; }
 
         [DefaultValue(true)]
         public Boolean isActive { get; set; } = true;

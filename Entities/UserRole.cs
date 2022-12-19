@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OrderManagement.Entities
 {
-    public class UserRole : IdentityUserRole<string>
+    public class UserRole 
     {
      public Users users { get; set; }
 

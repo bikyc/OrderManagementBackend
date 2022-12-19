@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,7 @@ namespace OrderManagement.Controllers
    
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     //[EnableCors("CorsPolicy")]
     public class CustomerController : ControllerBase
     {
