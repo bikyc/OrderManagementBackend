@@ -11,6 +11,7 @@ namespace OrderManagement.DataAccess
     {
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options)
         {
+
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
