@@ -23,6 +23,9 @@ namespace OrderManagement.Entities
 
         public int totalPrice { get; set; }
 
+
+        public string OrderStatus { get; set; } 
+
         [DefaultValue(true)]
         public Boolean isActive { get; set; } = true;
     }

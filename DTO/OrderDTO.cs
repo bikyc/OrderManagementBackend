@@ -16,6 +16,8 @@ namespace OrderManagement.DTO
 
         public int totalprice { get; set; }
 
+        public string OrderStatus { get; set; }
+
 
     }
 }
